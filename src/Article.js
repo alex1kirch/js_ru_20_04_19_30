@@ -31,6 +31,7 @@ export default class Article extends Component {
         const {article} = this.props;
         const {isOpen} = this.state;
 
+    //Я б эту проверку спрятал в CommentList
         const comments = article.comments || [];
         return isOpen && <div>
             <div>{this.props.article.text}</div>
