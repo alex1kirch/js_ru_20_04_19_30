@@ -28,7 +28,7 @@ function getBody(props) {
 
 CommentList.propTypes = {
     comments: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired
+        id: PropTypes.number.isRequired
     })),
     isOpen: PropTypes.bool,
     toggleOpen: PropTypes.func
