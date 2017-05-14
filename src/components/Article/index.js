@@ -11,22 +11,13 @@ class Article extends Component {
             text: PropTypes.string,
             comments: PropTypes.array
         }),
-        //from toggleOpen decorator
+        // from toggleOpen decorator
         isOpen: PropTypes.bool,
         toggleOpen: PropTypes.func
     }
 
-/*
-    componentWillMount() {
-        console.log('---', 'mounting')
-    }
-*/
     shouldComponentUpdate(nextProps, nextState) {
         return nextProps.isOpen != this.props.isOpen
-    }
-
-    componentWillUpdate() {
-        console.log('---', 'updating')
     }
 
     render() {
@@ -39,7 +30,7 @@ class Article extends Component {
                 <CSSTransitionGroup
                     transitionName = "article"
                     transitionEnterTimeout = {500}
-                    transitionLeaveTimeout = {30000}
+                    transitionLeaveTimeout = {300}
                 >
                     {this.getBody()}
                 </CSSTransitionGroup>

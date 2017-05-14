@@ -1,7 +1,7 @@
-import React  from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
-function Comment({comment}) {
+function Comment({ comment }) {
     return (
         <div>
             <p>{comment.text} <b>by {comment.user}</b></p>

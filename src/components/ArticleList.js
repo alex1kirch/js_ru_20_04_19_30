@@ -5,12 +5,6 @@ import PropTypes from 'prop-types'
 import accordion from '../decorators/accordion'
 
 class ArticleList extends Component {
-    componentDidMount() {
-        const ref = this.refs[this.props.articles[0].id]
-        console.log('---', ref, findDOMNode(ref))
-    }
-
-
     render() {
         const {articles, toggleOpenItem, isItemOpened} = this.props
 
@@ -22,14 +16,10 @@ class ArticleList extends Component {
             />
         </li>)
         return (
-            <ul ref={this.getContainerRef}>
+            <ul>
                 {elements}
             </ul>
         )
-    }
-
-    getContainerRef = ref => {
-        this.list = ref
     }
 }
 
