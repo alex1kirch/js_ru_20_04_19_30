@@ -9,6 +9,7 @@ import 'react-select/dist/react-select.css'
 import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 
+//компонент становится слишком большим, пора разбивать на более мелкие
 class App extends Component {
     static propTypes = {
         articles: PropTypes.array.isRequired
