@@ -7,6 +7,7 @@ class InputTextField extends Component {
         name: PropTypes.string.isRequired,
         min: PropTypes.number.isRequired,
         max: PropTypes.number.isRequired,
+        //так потом проблемы с сабмитом будут - лучше раздели логику валидации и изменения
         // from changeTextValidation decorator
         value: PropTypes.string,
         isValid: PropTypes.bool,
