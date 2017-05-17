@@ -5,12 +5,14 @@ import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 import './style.css'
 import {connect} from 'react-redux'
 import {deleteArticle} from '../../AC/index'
+import moment from 'moment'
 
 class Article extends Component {
     static propTypes = {
         article: PropTypes.shape({
             title: PropTypes.string.isRequired,
             text: PropTypes.string,
+            date: PropTypes.string.isRequired,
             comments: PropTypes.array
         }),
         //from toggleOpen decorator
@@ -36,7 +38,7 @@ class Article extends Component {
         return (
             <section>
                 <h2 onClick={toggleOpen}>
-                    {article.title}
+                    {article.title} - created: {moment(article.date).format()}
                 </h2>
                 <a href = "#" onClick = {this.handleDelete}>delete me</a>
                 <CSSTransitionGroup
