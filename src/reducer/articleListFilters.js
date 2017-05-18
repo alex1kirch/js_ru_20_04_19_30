@@ -1,5 +1,6 @@
 import { FILTER_ARTICLELIST_BY_ITEMS, FILTER_ARTICLELIST_BY_DATE } from '../constants'
 
+//не очень, у тебя два источника правды - прийдется тут сразу и даления/добавления и тд обрабатывать
 export default (filters = { byDate: { from: null, to: null }, byItems: { selection: [] } }, action) => {
     const { type, payload } = action
     
