@@ -1,13 +1,16 @@
 import React, {Component} from 'react'
-import CommnetList from '../CommentList'
+import CommentList from '../CommentList'
 import PropTypes from 'prop-types'
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 import './style.css'
 import {connect} from 'react-redux'
 import {deleteArticle} from '../../AC/index'
+import {articleSelectorFactory} from '../../selectors'
 
 class Article extends Component {
     static propTypes = {
+        id: PropTypes.string.isRequired,
+        //from connect
         article: PropTypes.shape({
             title: PropTypes.string.isRequired,
             text: PropTypes.string,
@@ -23,10 +26,6 @@ class Article extends Component {
         console.log('---', 'mounting')
     }
 */
-    shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.isOpen != this.props.isOpen
-    }
-
     componentWillUpdate() {
         console.log('---', 'updating')
     }
@@ -60,10 +59,20 @@ class Article extends Component {
         return this.props.isOpen && (
             <div>
                 {this.props.article.text}
-                <CommnetList comments={this.props.article.comments}/>
+                <CommentList articleId={this.props.id} comments={this.props.article.comments}/>
             </div>
         )
     }
 }
 
-export default connect(null, { deleteArticle })(Article)
+function createMapStateToProps() {
+    const articleSelector = articleSelectorFactory()
+
+    return function mapStateToProps(state, ownProps) {
+        return {
+            article: articleSelector(state, ownProps)
+        }
+    }
+}
+
+export default connect(createMapStateToProps, { deleteArticle })(Article)

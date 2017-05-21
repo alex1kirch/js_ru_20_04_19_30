@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+import {addComment} from '../../AC/index'
 import './style.css'
 
 class CommentForm extends Component {
     static propTypes = {
-
+        // Возможно лучше было бы развернуть декоратор
+        // и хранить в state openedArticleId
+        // но этот способ кажется более очевидным
+        // для добавления комментария
+        articleId: PropTypes.string.isRequired
     };
 
     state = {
@@ -27,8 +33,15 @@ class CommentForm extends Component {
     }
 
     handleSubmit = ev => {
+        const { articleId } = this.props
+
         ev.preventDefault()
         console.log('---', this.state)
+
+        // TODO: to make submitted data validation (is empty, is red)
+
+        this.props.addComment({...this.state, articleId });
+
         this.setState({
             user: '',
             comment: ''
@@ -46,4 +59,4 @@ class CommentForm extends Component {
     }
 }
 
-export default CommentForm
+export default connect(null, { addComment })(CommentForm)
