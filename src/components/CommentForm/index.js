@@ -10,6 +10,7 @@ class CommentForm extends Component {
         // и хранить в state openedArticleId
         // но этот способ кажется более очевидным
         // для добавления комментария
+        //да, так лучше
         articleId: PropTypes.string.isRequired
     };
 
