@@ -11,6 +11,7 @@ export default (comments = commentMap, action) => {
     switch (type) {
         case ADD_COMMENT:
             const { user, text } = payload
+            //не мутируй стейт
             comments[newId] = { user, text, id: newId }
             return { ...comments };
     }
