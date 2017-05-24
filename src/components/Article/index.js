@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import CommnetList from '../CommentList'
+import CommentList from '../CommentList'
 import PropTypes from 'prop-types'
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
 import Loader from '../Loader'
@@ -19,8 +19,8 @@ class Article extends Component {
         toggleOpen: PropTypes.func
     }
 
-    componentWillReceiveProps({article, loadArticle, isOpen}) {
-        if (isOpen && !this.props.isOpen) loadArticle(article.id)
+    componentWillReceiveProps({article: { loading, loaded, id }, loadArticle, isOpen}) {
+        if (isOpen && !loading && !loaded) loadArticle(id)
     }
 
 /*
@@ -62,10 +62,11 @@ class Article extends Component {
         const {isOpen, article} = this.props
         if (!isOpen) return null
         if (article.loading) return <Loader />
+
         return (
             <div>
                 {this.props.article.text}
-                <CommnetList article = {this.props.article}/>
+                <CommentList article = {this.props.article}/>
             </div>
         )
     }

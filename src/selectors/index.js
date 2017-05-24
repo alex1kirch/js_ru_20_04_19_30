@@ -19,3 +19,7 @@ export const filteredArticlesSelector = createSelector(articlesGetter, filtersGe
 export const commentSelectorFactory = () => createSelector(commentsGetter, idGetter, (comments, id) => {
     return comments.get(id)
 })
+
+export const commentListSelectorFactory = () => createSelector(commentsGetter, (comments) => {
+    return mapToArr(comments)
+})

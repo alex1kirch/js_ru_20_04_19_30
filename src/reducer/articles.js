@@ -1,4 +1,4 @@
-import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE, START, SUCCESS} from '../constants'
+import {DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE, LOAD_ARTICLE_COMMENTS, START, SUCCESS} from '../constants'
 import {arrayToMap} from '../utils'
 import {Map, OrderedMap, Record} from 'immutable'
 
@@ -8,7 +8,10 @@ const ArticleModel = Record({
     title: null,
     text: '',
     comments: [],
-    loading: false
+    loading: false,
+    loaded: false,
+    commentsLoading: false,
+    commentsLoaded: false
 })
 
 const DefaultReducerState = Record({
@@ -21,7 +24,7 @@ export default (articles = new DefaultReducerState(), action) => {
     const {type, payload, response, randomId} = action
     switch (type) {
         case DELETE_ARTICLE:
-            return articles.deleteId(['entities', payload.id])
+            return articles.deleteIn(['entities', payload.id])
 
         case ADD_COMMENT:
             return articles.updateIn(
@@ -39,10 +42,21 @@ export default (articles = new DefaultReducerState(), action) => {
                 .set('loaded', true)
 
         case LOAD_ARTICLE + START:
-            return articles.setIn(['entities', payload.id, 'loading'], true)
+            return articles
+                .setIn(['entities', payload.id, 'loading'], true)
 
         case LOAD_ARTICLE + SUCCESS:
-            return articles.setIn(['entities', payload.id], new ArticleModel(payload.response))
+            return articles
+                .setIn(['entities', payload.id], new ArticleModel(payload.response))
+                .setIn(['entities', payload.id, 'loaded'], true)
+
+        case LOAD_ARTICLE_COMMENTS + START:
+            return articles.setIn(['entities', payload.articleId, 'commentsLoading'], true )
+
+        case LOAD_ARTICLE_COMMENTS + SUCCESS:
+            return articles
+                .setIn(['entities', payload.articleId, 'commentsLoading'], false )
+                .setIn(['entities', payload.articleId, 'commentsLoaded'], true )
     }
 
     return articles

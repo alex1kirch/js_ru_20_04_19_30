@@ -1,6 +1,6 @@
 import $ from 'jquery'
 import { INCREMENT, DELETE_ARTICLE, CHANGE_DATE_RANGE, CHANGE_SELECTION, ADD_COMMENT, LOAD_ALL_ARTICLES,
-    LOAD_ARTICLE, START, SUCCESS, FAIL } from '../constants'
+    LOAD_ARTICLE_COMMENTS, LOAD_ARTICLE, START, SUCCESS, FAIL } from '../constants'
 
 export function increment() {
     const action = {
@@ -35,6 +35,14 @@ export function addComment(comment, articleId) {
         type: ADD_COMMENT,
         payload: { comment, articleId },
         generateId: true
+    }
+}
+
+export function loadArticleComments(articleId) {
+    return {
+        type: LOAD_ARTICLE_COMMENTS,
+        payload: { articleId },
+        callAPI: `/api/comment?article=${articleId}`
     }
 }
 

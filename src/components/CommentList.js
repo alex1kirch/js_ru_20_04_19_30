@@ -1,39 +1,65 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Comment from './Comment'
 import CommentForm from './CommentForm/index'
 import toggleOpen from '../decorators/toggleOpen'
 import PropTypes from 'prop-types'
+import Loader from './Loader'
+import { connect } from 'react-redux'
+import { loadArticleComments } from '../AC/index'
+import { commentListSelectorFactory } from '../selectors'
 
-function CommentList(props) {
-    const {isOpen, toggleOpen} = props
-    const linkText = isOpen ? 'hide comments' : 'show comments'
+class CommentList extends Component {
+    componentWillReceiveProps({ article: { id, commentsLoading, commentsLoaded }, loadArticleComments, isOpen }) {
+        if (isOpen && !commentsLoading && !commentsLoaded) loadArticleComments(id)
+    }
 
-    return (
-        <div>
-            <a href="#" onClick={toggleOpen}>{linkText}</a>
-            {getBody(props)}
-        </div>
-    )
-}
+    render() {
+        const { isOpen, toggleOpen } = this.props
+        const linkText = isOpen ? 'hide comments' : 'show comments'
 
-function getBody(props) {
-    const {article: { id, comments = [] }, isOpen} = props
-    if (!isOpen) return null
-    if (!comments.length) return <div><p>No comments yet</p><CommentForm articleId = {id}/></div>
-    return (
-        <div>
-            <ul>
-                {comments.map(id => <li key={id}><Comment id={id}/></li>)}
-            </ul>
-            <CommentForm articleId = {id} />
-        </div>
-    )
+        return (
+            <div>
+                <a href="#" onClick={toggleOpen}>{linkText}</a>
+                {this.getBody(this.props)}
+            </div>
+        )
+    }
+
+    getBody(props) {
+        const { article: { id, commentsLoading }, comments = [], isOpen } = props
+        if (!isOpen) return null
+        if (commentsLoading) return <Loader />
+
+        if (!comments.length) return <div><p>No comments yet</p><CommentForm articleId={id} /></div>
+        return (
+            <div>
+                <ul>
+                    {comments.map(comment => <li key={comment.id}><Comment comment={comment} /></li>)}
+                </ul>
+                <CommentForm articleId={id} />
+            </div>
+        )
+    }
 }
 
 CommentList.propTypes = {
+    article: PropTypes.object.isRequired,
+    // from connect
+    comments: PropTypes.array.isRequired,
+    loading: PropTypes.bool,
+    // from toggleOpen decorator
     isOpen: PropTypes.bool,
-    toggleOpen: PropTypes.func,
-    article: PropTypes.object
+    toggleOpen: PropTypes.func
 }
 
-export default toggleOpen(CommentList)
+const createMapStateToProps = () => {
+    const commentListSelector = commentListSelectorFactory()
+
+    return (state, ownProps) => {
+        return {
+            comments: commentListSelector(state, ownProps)
+        }
+    }
+}
+
+export default connect(createMapStateToProps, { loadArticleComments })(toggleOpen(CommentList))
