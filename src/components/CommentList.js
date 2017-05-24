@@ -26,9 +26,10 @@ class CommentList extends Component {
     }
 
     getBody(props) {
-        const { article: { id, commentsLoading }, comments = [], isOpen } = props
+        const { article: { id, commentsLoading, commentsLoaded }, comments = [], isOpen } = props
         if (!isOpen) return null
         if (commentsLoading) return <Loader />
+        if (!commentsLoaded) return null
 
         if (!comments.length) return <div><p>No comments yet</p><CommentForm articleId={id} /></div>
         return (

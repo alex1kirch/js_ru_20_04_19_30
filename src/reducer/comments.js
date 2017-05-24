@@ -19,7 +19,7 @@ export default (comments = new OrderedMap({}), action) => {
                 });
 
         case LOAD_ARTICLE_COMMENTS + SUCCESS:
-            return arrayToMap(response, CommentModel)
+            return arrayToMap(response, CommentModel, comments)
     }
 
     return comments

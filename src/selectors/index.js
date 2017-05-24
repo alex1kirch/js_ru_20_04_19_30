@@ -5,6 +5,7 @@ export const articlesGetter = state => state.articles.entities
 export const filtersGetter = state => state.filters
 export const commentsGetter = state => state.comments
 export const idGetter = (state, props) => props.id
+export const articleCommentsIdsGetter = (state, props) => props.article.comments
 
 export const filteredArticlesSelector = createSelector(articlesGetter, filtersGetter, (articles, filters) => {
     const {selected, dateRange: {from, to}} = filters
@@ -20,6 +21,6 @@ export const commentSelectorFactory = () => createSelector(commentsGetter, idGet
     return comments.get(id)
 })
 
-export const commentListSelectorFactory = () => createSelector(commentsGetter, (comments) => {
-    return mapToArr(comments)
+export const commentListSelectorFactory = () => createSelector(commentsGetter, articleCommentsIdsGetter, (comments, commentsIds) => {
+    return comments.size > 0 ? commentsIds.map(id => comments.get(id)) : [];
 })
