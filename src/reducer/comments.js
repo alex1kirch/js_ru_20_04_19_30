@@ -20,6 +20,7 @@ export default (comments = new OrderedMap({}), action) => {
                 });
 
         case LOAD_ARTICLE_COMMENTS + SUCCESS:
+            //каждый раз перезатераешь комменты, используй merge
             return arrayToMap(response, CommentModel, comments)
     }
 
