@@ -9,6 +9,7 @@ import {deleteArticle, loadArticle} from '../../AC/index'
 
 class Article extends Component {
     static propTypes = {
+        id: PropTypes.string.isRequired,
         article: PropTypes.shape({
             title: PropTypes.string.isRequired,
             text: PropTypes.string,
@@ -19,8 +20,16 @@ class Article extends Component {
         toggleOpen: PropTypes.func
     }
 
-    componentWillReceiveProps({article, loadArticle, isOpen}) {
-        if (isOpen && !this.props.isOpen) loadArticle(article.id)
+    componentDidMount() {
+        this.checkAndLoad(this.props)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.checkAndLoad(nextProps)
+    }
+
+    checkAndLoad({article, id, loadArticle}) {
+        if (!article || (!article.text && !article.loading)) loadArticle(id)
     }
 
 /*
@@ -35,6 +44,7 @@ class Article extends Component {
 
     render() {
         const {article, toggleOpen} = this.props
+        if (!article) return null
         return (
             <section>
                 <h2 onClick={toggleOpen}>
@@ -71,4 +81,6 @@ class Article extends Component {
     }
 }
 
-export default connect(null, { deleteArticle, loadArticle })(Article)
+export default connect((state, {id}) => ({
+    article: state.articles.getIn(['entities', id])
+}), { deleteArticle, loadArticle })(Article)
