@@ -1,6 +1,8 @@
 import $ from 'jquery'
-import { INCREMENT, DELETE_ARTICLE, CHANGE_DATE_RANGE, CHANGE_SELECTION, ADD_COMMENT, LOAD_ALL_ARTICLES,
-    LOAD_ARTICLE, LOAD_ARTICLE_COMMENTS, START, SUCCESS, FAIL } from '../constants'
+import {
+    INCREMENT, DELETE_ARTICLE, CHANGE_DATE_RANGE, CHANGE_SELECTION, ADD_COMMENT, LOAD_ALL_ARTICLES,
+    LOAD_ARTICLE, LOAD_PAGE_COMMENTS, LOAD_ARTICLE_COMMENTS, START, SUCCESS, FAIL
+} from '../constants'
 
 export function increment() {
     const action = {
@@ -12,7 +14,7 @@ export function increment() {
 export function deleteArticle(id) {
     return {
         type: DELETE_ARTICLE,
-        payload : { id }
+        payload: { id }
     }
 }
 
@@ -45,6 +47,16 @@ export function loadAllArticles() {
     }
 }
 
+export function loadPageComments(page) {
+    const pageSize = 5;
+
+    return {
+        type: LOAD_PAGE_COMMENTS,
+        callAPI: `/api/comment?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
+        payload: { page }
+    }
+}
+
 export function loadArticlesComments(articleId) {
     return {
         type: LOAD_ARTICLE_COMMENTS,
@@ -64,11 +76,11 @@ export function loadArticle(id) {
             $.get(`/api/article/${id}`)
                 .done(response => dispatch({
                     type: LOAD_ARTICLE + SUCCESS,
-                    payload: {response, id}
+                    payload: { response, id }
                 }))
                 .fail(error => dispatch({
                     type: LOAD_ARTICLE + FAIL,
-                    payload: {error, id}
+                    payload: { error, id }
                 }))
         }, 1000)
     }
