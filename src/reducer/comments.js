@@ -35,6 +35,7 @@ export default (comments = new DefaultReducerState(), action) => {
             return comments
                 .set("totalOnPage", response.total)
                 .mergeIn(['entities'], arrayToMap(response.records, CommentModel))
+                //OrderedSet - какая-то извращенная структура, по сути это List
                 .setIn(['pages', payload.page], new OrderedSet(response.records.map(c => c.id)));
     }
 
