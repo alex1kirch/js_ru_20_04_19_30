@@ -11,6 +11,7 @@ const CommentModel = Record({
 const DefaultReducerState = Record({
     entities: new OrderedMap({}),
     pages: new Map({}),
+    //неудачное название
     totalOnPage: null
 })
 
