@@ -6,18 +6,23 @@ import Loader from '../Loader'
 import './style.css'
 import {connect} from 'react-redux'
 import {deleteArticle, loadArticle} from '../../AC/index'
+import LocalizedText from '../LocalizedText'
 
 class Article extends Component {
     static propTypes = {
         id: PropTypes.string.isRequired,
         article: PropTypes.shape({
-            title: PropTypes.string.isRequired,
+            title: PropTypes.string,
             text: PropTypes.string,
             comments: PropTypes.array
         }),
         //from toggleOpen decorator
         isOpen: PropTypes.bool,
         toggleOpen: PropTypes.func
+    }
+
+    static contextTypes = {
+        user: PropTypes.string
     }
 
     componentDidMount() {
@@ -32,16 +37,6 @@ class Article extends Component {
         if (!article || (!article.text && !article.loading)) loadArticle(id)
     }
 
-/*
-    componentWillMount() {
-        console.log('---', 'mounting')
-    }
-*/
-
-    componentWillUpdate() {
-        console.log('---', 'updating')
-    }
-
     render() {
         const {article, toggleOpen} = this.props
         if (!article) return null
@@ -50,7 +45,10 @@ class Article extends Component {
                 <h2 onClick={toggleOpen}>
                     {article.title}
                 </h2>
-                <a href = "#" onClick = {this.handleDelete}>delete me</a>
+                <h3>
+                    User: {this.context.user}
+                </h3>
+                <a href = "#" onClick = {this.handleDelete}><LocalizedText>delete me</LocalizedText></a>
                 <CSSTransitionGroup
                     transitionName = "article"
                     transitionEnterTimeout = {500}
@@ -83,4 +81,4 @@ class Article extends Component {
 
 export default connect((state, {id}) => ({
     article: state.articles.getIn(['entities', id])
-}), { deleteArticle, loadArticle })(Article)
+}), { deleteArticle, loadArticle }, null, {pure: false})(Article)

@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import { INCREMENT, DELETE_ARTICLE, CHANGE_DATE_RANGE, CHANGE_SELECTION, ADD_COMMENT, LOAD_ALL_ARTICLES,
-    LOAD_ARTICLE, LOAD_ARTICLE_COMMENTS, START, SUCCESS, FAIL } from '../constants'
+    LOAD_ARTICLE, LOAD_ARTICLE_COMMENTS, LOAD_COMMENTS_FOR_PAGE, START, SUCCESS, FAIL } from '../constants'
+import {push, replace} from 'react-router-redux'
 
 export function increment() {
     const action = {
@@ -66,10 +67,22 @@ export function loadArticle(id) {
                     type: LOAD_ARTICLE + SUCCESS,
                     payload: {response, id}
                 }))
-                .fail(error => dispatch({
-                    type: LOAD_ARTICLE + FAIL,
-                    payload: {error, id}
-                }))
-        }, 1000)
+                .fail(error => {
+                    dispatch({
+                        type: LOAD_ARTICLE + FAIL,
+                        payload: {error, id}
+                    })
+
+                    dispatch(replace('/error'))
+                })
+        }, 500)
+    }
+}
+
+export function loadCommentsForPage(page) {
+    return {
+        type: LOAD_COMMENTS_FOR_PAGE,
+        payload: { page },
+        callAPI: `/api/comment?limit=5&offset=${(page - 1) * 5}`
     }
 }
